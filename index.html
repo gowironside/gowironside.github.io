@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+		<meta charset = “utf-8”>
+		<title>Pricey Precision Game</title>
+		<style>
+	title {font-family: "Franklin Gothic Medium", sans-serif;}	
+	
+	body {
+		font-size: 12px;
+		background-color: bisque;
+		}
+
+	header{
+		height: 300px;
+		background-color: cornsilk;
+		padding-bottom: px;
+		padding-left: 0px;
+		padding-top: 5px;
+		padding-bottom: 20px;
+		background-size: auto, auto, auto, cover;
+		background: auto;
+		margin-left: 0px;
+		margin-right: 0px;
+
+	}	
+
+	h1  {
+		color: rgb(13, 53, 77);	
+		font-family: "Libre Baskerville", sans-serif;
+		text-align: center;
+		font-size: 3.2em;
+		font-weight: lighter;
+		padding: 0px;
+		letter-spacing: 0.01em;
+		text-transform: uppercase;
+		margin: 20px;
+		margin-top: 50px;
+		}
+
+	h2  {
+		color: rgb(13, 53, 77);
+		font-family: "Libre Baskerville", sans-serif;
+		font-size: 1.6em;
+		font-style: italic;
+		font-weight: lighter;
+		padding: 3px;
+		letter-spacing: 0.01em;
+		text-decoration: underline dotted;
+		text-align: center;
+		margin: 20px;
+		margin-top: 20px;
+		
+		}
+
+	h3 {
+		color: rgb(13, 53, 77);
+		font-family: "Libre Baskerville", sans-serif;
+		font-size: 1.8em;
+		font-weight: lighter;
+		text-transform: uppercase;
+		padding: 3px;
+		letter-spacing: 0.01em;
+		text-align: center;
+		margin: 20px;
+		margin-left: 40px;
+
+	}
+
+	p {
+		color: rgb(13, 53, 77);
+		font-family: "Libre Baskerville", sans-serif;
+		font-size: 1.2em;
+		font-weight: normal;
+		letter-spacing: 0.01em;
+		padding: 3px;
+		line-height: 30px;
+		width: 550px;
+    	margin-block-end: 1em;
+		line-break: auto;	
+		text-align: center;
+		margin: 20px;
+		margin-left: 440px;
+	}
+
+	#mod {
+		position: relative;
+		top: 40em;
+
+	}
+	
+	header {
+		height: 175px;
+		
+
+	}
+
+	a {
+		font-family: "Libre Baskerville", sans-serif;	
+		font-weight: normal;
+		font-size: 1.2em;
+		letter-spacing: 0.01em;
+		padding: 3px;
+		color: deepskyblue;
+
+
+
+	}
+
+
+
+
+
+	canvas {
+    border: 0px groove rgb(13, 53, 77);
+    background-color: bisque;
+	position: absolute;
+	left: auto;
+	top: 220px;
+	right: 220px;
+	
+}
+	#canvas-position {
+		margin-top: 0px;
+
+
+	}
+
+#push-button {
+	font-size: medium;
+	font-family: "Libre Baskerville", sans-serif;
+	font-weight: bold;
+	background-color: bisque;
+	color: rgb(13, 53, 77);
+	position: absolute;
+	top: 650px;
+	left: 650px;
+	
+
+}	
+
+#restart-button {
+	font-size: medium;
+	font-family: "Libre Baskerville", sans-serif;
+	font-weight: bold;
+	background-color: bisque;
+	color: rgb(13, 53, 77);
+	position: absolute;
+	top: 650px;
+	left: 730px;
+
+}
+
+
+		</style>
+	</head>	
+	<body onload="startGame()">
+
+	<!-- <img class="xposition" src="https://cerncourier.com/wp-content/uploads/2019/11/Interstellar.jpg" alt="A Black Hole" width="300"> -->
+
+
+
+	<header role="banner">
+	<h1>Pricey Precision</h1>
+	<h2>For the epic players</h2>
+	</header>
+
+	<div id="canvas-position">
+	<canvas id="canvas"></canvas>
+	</div>
+
+	 <div id="mod">
+		<h3>Instructions</h3>
+		<p>Press the "PUSH" button to keep yourself airborne. Remember, The more pillars you pass through, the higher your score. Good Luck!</p>
+
+		<p>For more information on the history of video games, here's a link: <a target="_blank"href="https://en.wikipedia.org/wiki/History_of_video_games">History of Video Games</a></p>
+	</div> 
+
+		
+	<script>
+var myGamePiece;
+var myObstacles = [];
+var myScore;
+
+function startGame() {
+    myGamePiece = new component(30, 30, "rgb(13, 53, 77)", 10, 120);
+    myGamePiece.gravity = 0.2;
+    myScore = new component("30px", "Libre Baskerville", "rgb(13, 53, 77)", 280, 40, "text");
+    myGameArea.start();
+}
+
+var canvas = document.getElementById("canvas");
+canvas.style.left = "490px";
+
+var myGameArea = {
+     canvas : document.getElementById("canvas"),
+    start : function() {
+        this.canvas.width = 480;
+        this.canvas.height = 400;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.frameNo = 0;
+        this.interval = setInterval(updateGameArea, 20);
+        },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+function component(width, height, color, x, y, type) {
+    this.type = type;
+    this.score = 0;
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;    
+    this.x = x;
+    this.y = y;
+    this.gravity = 0;
+    this.gravitySpeed = 0;
+    this.update = function() {
+        ctx = myGameArea.context;
+        if (this.type == "text") {
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = color;
+            ctx.fillText(this.text, this.x, this.y);
+        } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+    this.newPos = function() {
+        this.gravitySpeed += this.gravity;
+        this.x += this.speedX;
+        this.y += this.speedY + this.gravitySpeed;
+        this.hitBottom();
+    }
+    this.hitBottom = function() {
+        var rockbottom = myGameArea.canvas.height - this.height;
+        if (this.y > rockbottom) {
+            this.y = rockbottom;
+            this.gravitySpeed = 0;
+        }
+    }
+    this.crashWith = function(otherobj) {
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+    }
+}
+
+function updateGameArea() {
+    var x, height, gap, minHeight, maxHeight, minGap, maxGap;
+    for (i = 0; i < myObstacles.length; i += 1) {
+        if (myGamePiece.crashWith(myObstacles[i])) {
+            return;
+        } 
+    }
+    myGameArea.clear();
+    myGameArea.frameNo += 1;
+    if (myGameArea.frameNo == 1 || everyinterval(150)) {
+        x = myGameArea.canvas.width;
+        minHeight = 20;
+        maxHeight = 200;
+        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+        minGap = 50;
+        maxGap = 200;
+        gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
+        myObstacles.push(new component(10, height, "rgb(13, 53, 77)", x, 0));
+        myObstacles.push(new component(10, x - height - gap, "rgb(13, 53, 77)", x, height + gap));
+    }
+    for (i = 0; i < myObstacles.length; i += 1) {
+        myObstacles[i].x += -1;
+        myObstacles[i].update();
+    }
+    myScore.text= "XP: " + myGameArea.frameNo;
+    myScore.update();
+    myGamePiece.newPos();
+    myGamePiece.update();
+}
+
+function everyinterval(n) {
+    if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
+    return false;
+}
+
+function accelerate(n) {
+    myGamePiece.gravity = n * 3;
+}
+
+var restartButton = document.getElementById("restart-button");
+restartButton.addEventListener("click", startAgain)
+function startAgain() {
+    document.location.reload()
+
+
+
+}
+	</script>
+	<br>
+	
+	<button id="push-button" onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">PUSH</button>
+	
+	<button id="restart-button" onmousedown="startAgain()">RESTART</button>
+</body>
+</html>
